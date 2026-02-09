@@ -3,233 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>สถิติจำนวนประชากร ตำบลห้วยทราย</title>
+    <title>สรุปสถิติประชากร ตำบลห้วยทราย</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Sarabun', sans-serif; background-color: #f8fafc; }
-        .village-item.active { border-left: 4px solid #2563eb; background-color: #eff6ff; color: #1e40af; }
+        body { font-family: 'Sarabun', sans-serif; background-color: #f1f5f9; }
+        .active-village { border-left: 5px solid #1d4ed8; background-color: #eff6ff; }
+        .stat-card { transition: transform 0.2s ease; }
+        .stat-card:hover { transform: translateY(-3px); }
+        .map-container { position: relative; overflow: hidden; border-radius: 1.5rem; }
     </style>
 </head>
 <body class="text-slate-800">
 
-    <!-- Header -->
-    <header class="bg-blue-700 text-white shadow-lg p-6 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-4 md:mb-0">
-                <h1 class="text-2xl font-bold">สถิติจำนวนประชากรตำบลห้วยทราย</h1>
-                <p class="text-blue-100 opacity-90 text-sm">อ.แม่ริม จ.เชียงใหม่ | ข้อมูลประจำเดือน กันยายน 2568</p>
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-900 to-blue-700 text-white shadow-xl p-8 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl font-bold tracking-tight">สรุปสถิติจำนวนประชากรตำบลห้วยทราย</h1>
+                <p class="text-blue-100 mt-1 opacity-90">อำเภอแม่ริม จังหวัดเชียงใหม่ | ข้อมูลเดือน กันยายน 2568</p>
             </div>
-            <div class="text-center md:text-right">
-                <div class="text-3xl font-bold leading-none">4,889</div>
-                <div class="text-xs uppercase tracking-wider opacity-75">ประชากรรวมทั้งสิ้น</div>
+            <div class="mt-6 md:mt-0 flex items-center bg-white/10 px-6 py-3 rounded-2xl backdrop-blur-md border border-white/20">
+                <div class="mr-4 text-left">
+                    <p class="text-xs uppercase font-semibold text-blue-100">ประชากรรวม</p>
+                    <p class="text-3xl font-bold">4,889 <span class="text-sm font-normal">คน</span></p>
+                </div>
+                <div class="h-10 w-px bg-white/20 mx-2"></div>
+                <div class="ml-4 text-right">
+                    <p class="text-xs uppercase font-semibold text-blue-100">จุดหนาแน่น</p>
+                    <p class="text-lg font-bold">หมู่ที่ 2</p>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <main class="max-w-7xl mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- Sidebar: Village List -->
-        <aside class="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-fit">
-            <div class="p-4 border-b border-slate-100 bg-slate-50">
-                <h2 class="font-semibold text-slate-600 flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m0 10h1m-1 4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    เลือกพื้นที่หมู่บ้าน
-                </h2>
+        <!-- Sidebar: Village Selection -->
+        <aside class="lg:col-span-4 space-y-4">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden h-fit">
+                <div class="p-5 bg-slate-50 border-b border-slate-100">
+                    <h2 class="font-bold text-slate-700 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        เลือกดูข้อมูลรายหมู่บ้าน
+                    </h2>
+                </div>
+                <div id="villageMenu" class="divide-y divide-slate-100">
+                    <!-- Village buttons sorted 1-5 -->
+                </div>
             </div>
-            <nav id="villageList" class="divide-y divide-slate-100">
-                <!-- รายชื่อหมู่บ้านจะถูกใส่ที่นี่ด้วย JavaScript -->
-            </nav>
+
+            <!-- Global Insight Card -->
+            <div class="bg-blue-950 text-white rounded-3xl p-6 shadow-lg shadow-blue-200">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1a1 1 0 112 0v1a1 1 0 11-2 0zM13.243 14.657a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM16 10a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+                    ข้อมูลเชิงลึก
+                </h3>
+                <ul class="space-y-3 text-blue-200 text-sm">
+                    <li class="flex items-start">
+                        <span class="mr-2">•</span>
+                        <span>หมู่ 2 หนองปลามัน มีประชากรหนาแน่นที่สุด (29.3%)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2">•</span>
+                        <span>หมู่ 4 แม่แอน มีกลุ่มประชากรไม่ใช่สัญชาติไทยสูงที่สุด</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2">•</span>
+                        <span>ตำบลห้วยทรายมีสัดส่วนหญิงมากกว่าชายเล็กน้อย (51.4%)</span>
+                    </li>
+                </ul>
+            </div>
         </aside>
 
-        <!-- Main Content: Detailed Stats -->
-        <section class="lg:col-span-8">
-            <div id="detailContainer" class="space-y-6">
-                <!-- ข้อมูลรายละเอียดจะแสดงผลที่นี่ -->
-                <div class="bg-white p-12 rounded-2xl shadow-sm border border-slate-200 text-center">
-                    <p class="text-slate-500 italic">กำลังโหลดข้อมูล...</p>
+        <!-- Main Display: Detail Panel -->
+        <section class="lg:col-span-8 space-y-6">
+            <div id="detailView" class="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-slate-200 min-h-[400px]">
+                <div class="animate-pulse flex flex-col items-center justify-center h-full">
+                    <div class="h-8 w-48 bg-slate-100 rounded mb-4"></div>
+                    <div class="h-4 w-64 bg-slate-100 rounded mb-8"></div>
+                    <div class="grid grid-cols-2 gap-4 w-full">
+                        <div class="h-24 bg-slate-50 rounded-2xl"></div>
+                        <div class="h-24 bg-slate-50 rounded-2xl"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="text-center p-8 text-slate-400 text-sm">
-        &copy; 2026 ระบบสถิติประชากรตำบลห้วยทราย
+    <footer class="text-center py-12 text-slate-400 text-sm">
+        &copy; 2026 ระบบรายงานสถิติประชากร ตำบลห้วยทราย อำเภอแม่ริม จังหวัดเชียงใหม่
     </footer>
 
     <script>
-        // ข้อมูลสถิติจากรูปภาพ
-        const populationData = [
+        // Updated data array with correct numerical order
+        const data = [
             { 
                 id: 0, 
-                name: "ยอดรวมทั้งตำบล", 
-                total: 4889,
-                thai: { m: 2105, f: 2301, total: 4406 },
-                nonThai: { m: 268, f: 215, total: 483 },
-                combined: { m: 2373, f: 2516 }
+                name: "รวมทั้งตำบลห้วยทราย", 
+                total: 4889, male: 2373, female: 2516, thai: 4406, nonThai: 483, pct: 100,
+                mapQuery: "ตำบล+ห้วยทราย+แม่ริม+เชียงใหม่"
             },
             { 
                 id: 1, 
-                name: "หมู่ที่ 1 อ้อย", 
-                total: 1096,
-                thai: { m: 472, f: 575, total: 1047 },
-                nonThai: { m: 28, f: 21, total: 49 },
-                combined: { m: 500, f: 596 }
+                name: "หมู่ที่ 1 บ้านอ้อย", 
+                total: 1096, male: 500, female: 596, thai: 1047, nonThai: 49, pct: 22.4,
+                mapQuery: "บ้านอ้อย+ห้วยทราย+แม่ริม"
             },
             { 
                 id: 2, 
-                name: "หมู่ที่ 2 หนองปลามัน", 
-                total: 1433,
-                thai: { m: 634, f: 724, total: 1358 },
-                nonThai: { m: 39, f: 36, total: 75 },
-                combined: { m: 673, f: 760 }
+                name: "หมู่ที่ 2 บ้านหนองปลามัน", 
+                total: 1433, male: 673, female: 760, thai: 1358, nonThai: 75, pct: 29.3,
+                mapQuery: "บ้านหนองปลามัน+เชียงใหม่"
             },
             { 
                 id: 3, 
-                name: "หมู่ที่ 3 ห้วยทราย", 
-                total: 963,
-                thai: { m: 453, f: 468, total: 921 },
-                nonThai: { m: 22, f: 20, total: 42 },
-                combined: { m: 475, f: 488 }
+                name: "หมู่ที่ 3 บ้านห้วยทราย", 
+                total: 963, male: 475, female: 488, thai: 921, nonThai: 42, pct: 19.7,
+                mapQuery: "บ้านห้วยทราย+ห้วยทราย+แม่ริม"
             },
             { 
                 id: 4, 
-                name: "หมู่ที่ 4 แม่แอน", 
-                total: 945,
-                thai: { m: 309, f: 330, total: 639 },
-                nonThai: { m: 172, f: 134, total: 306 },
-                combined: { m: 481, f: 464 }
+                name: "หมู่ที่ 4 บ้านแม่แอน", 
+                total: 945, male: 481, female: 464, thai: 639, nonThai: 306, pct: 19.3,
+                mapQuery: "บ้านแม่แอน+ห้วยทราย+แม่ริม"
             },
             { 
                 id: 5, 
-                name: "หมู่ที่ 5 หัวฝาย", 
-                total: 452,
-                thai: { m: 237, f: 204, total: 441 },
-                nonThai: { m: 7, f: 4, total: 11 },
-                combined: { m: 244, f: 208 }
+                name: "หมู่ที่ 5 บ้านหัวฝาย", 
+                total: 452, male: 244, female: 208, thai: 441, nonThai: 11, pct: 9.3,
+                mapQuery: "บ้านหัวฝาย+ห้วยทราย+แม่ริม"
             }
         ];
 
-        function renderVillageList() {
-            const list = document.getElementById('villageList');
-            if (!list) return;
-            
-            list.innerHTML = populationData.map(v => `
-                <button onclick="showDetail(${v.id})" class="village-item w-full text-left p-4 hover:bg-slate-50 flex justify-between items-center transition-all group">
-                    <span class="font-medium ${v.id === 0 ? 'text-blue-700 font-bold' : 'text-slate-700'}">${v.name}</span>
-                    <span class="text-sm bg-slate-100 px-2 py-1 rounded text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">${v.total.toLocaleString()} คน</span>
+        function init() {
+            renderMenu();
+            view(0);
+        }
+
+        function renderMenu() {
+            const menu = document.getElementById('villageMenu');
+            menu.innerHTML = data.map(v => `
+                <button onclick="view(${v.id})" id="btn-${v.id}" class="village-btn w-full px-6 py-4 flex justify-between items-center hover:bg-blue-50/50 transition-all text-left">
+                    <div>
+                        <p class="font-bold ${v.id === 0 ? 'text-blue-800' : 'text-slate-700'}">${v.name}</p>
+                        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">${v.pct}% ของประชากรตำบล</p>
+                    </div>
+                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-lg text-sm font-bold shadow-sm">${v.total.toLocaleString()}</span>
                 </button>
             `).join('');
         }
 
-        window.showDetail = function(id) {
-            const data = populationData.find(v => v.id === id);
-            const container = document.getElementById('detailContainer');
-            if (!container || !data) return;
+        function view(id) {
+            const item = data.find(v => v.id === id);
+            const viewDiv = document.getElementById('detailView');
             
-            // ปรับสถานะ Active ในเมนู
-            document.querySelectorAll('.village-item').forEach((el, index) => {
-                if (index === id) el.classList.add('active');
-                else el.classList.remove('active');
-            });
+            document.querySelectorAll('.village-btn').forEach(b => b.classList.remove('active-village'));
+            const activeBtn = document.getElementById(`btn-${id}`);
+            if (activeBtn) activeBtn.classList.add('active-village');
 
-            const maleRatio = Math.round((data.combined.m / data.total) * 100);
-            const femaleRatio = 100 - maleRatio;
+            const mPct = ((item.male / item.total) * 100).toFixed(1);
+            const fPct = ((item.female / item.total) * 100).toFixed(1);
+            const thaiPct = ((item.thai / item.total) * 100).toFixed(1);
+            const nonThaiPct = ((item.nonThai / item.total) * 100).toFixed(1);
 
-            container.innerHTML = `
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-start mb-6 border-b border-slate-100 pb-4">
+            viewDiv.innerHTML = `
+                <div class="space-y-8 animate-[fadeIn_0.5s_ease-out]">
+                    <!-- Title & Header -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-100 pb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-slate-800">${data.name}</h2>
-                            <p class="text-slate-500">สถิติประชากรแยกตามเพศและสัญชาติ</p>
+                            <span class="text-blue-600 font-black uppercase text-[10px] tracking-[0.2em]">STATISTICS OVERVIEW</span>
+                            <h2 class="text-3xl font-bold text-slate-900">${item.name}</h2>
                         </div>
-                        <div class="bg-blue-600 text-white px-5 py-2 rounded-xl text-center shadow-md shadow-blue-200">
-                            <div class="text-xs uppercase opacity-80 font-bold">รวมทั้งสิ้น</div>
-                            <div class="text-2xl font-bold">${data.total.toLocaleString()}</div>
-                        </div>
-                    </div>
-
-                    <!-- สรุปแยกเพศ -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                        <div class="bg-blue-50 border border-blue-100 p-5 rounded-xl">
-                            <div class="flex items-center">
-                                <div class="bg-blue-500 text-white p-3 rounded-lg mr-4">
-                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
-                                </div>
-                                <div>
-                                    <p class="text-blue-600 text-sm font-bold uppercase tracking-wide">เพศชาย</p>
-                                    <p class="text-3xl font-bold text-blue-900">${data.combined.m.toLocaleString()} <span class="text-base font-normal opacity-60 ml-1">คน</span></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-pink-50 border border-pink-100 p-5 rounded-xl">
-                            <div class="flex items-center">
-                                <div class="bg-pink-500 text-white p-3 rounded-lg mr-4">
-                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
-                                </div>
-                                <div>
-                                    <p class="text-pink-600 text-sm font-bold uppercase tracking-wide">เพศหญิง</p>
-                                    <p class="text-3xl font-bold text-pink-900">${data.combined.f.toLocaleString()} <span class="text-base font-normal opacity-60 ml-1">คน</span></p>
-                                </div>
+                        <div class="mt-4 md:mt-0 flex items-center space-x-3">
+                            <div class="text-right">
+                                <p class="text-slate-400 text-[10px] font-bold uppercase">สัดส่วนพื้นที่</p>
+                                <p class="text-2xl font-black text-blue-600">${item.pct}%</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- กราฟสัดส่วนเพศ -->
-                    <div class="mb-8 px-2">
-                        <div class="flex justify-between text-xs mb-2 font-bold text-slate-500">
-                            <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">ชาย ${maleRatio}%</span>
-                            <span class="bg-pink-100 text-pink-700 px-2 py-0.5 rounded">หญิง ${femaleRatio}%</span>
+                    <!-- Main Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="stat-card bg-blue-50/70 p-6 rounded-3xl border border-blue-100 shadow-sm">
+                            <div class="flex items-center">
+                                <div class="bg-blue-600 text-white p-3 rounded-2xl mr-4 shadow-lg shadow-blue-200">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-blue-700 text-xs font-bold uppercase">เพศชาย</p>
+                                    <p class="text-3xl font-black text-blue-900">${item.male.toLocaleString()}</p>
+                                    <div class="flex items-center text-blue-500 text-xs font-bold">
+                                        <div class="w-16 h-1.5 bg-blue-200 rounded-full mr-2 overflow-hidden">
+                                            <div style="width: ${mPct}%" class="bg-blue-600 h-full"></div>
+                                        </div>
+                                        ${mPct}%
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="w-full h-4 bg-slate-100 rounded-full flex overflow-hidden shadow-inner">
-                            <div style="width: ${maleRatio}%" class="bg-blue-500 h-full"></div>
-                            <div style="width: ${femaleRatio}%" class="bg-pink-500 h-full border-l border-white/20"></div>
+                        <div class="stat-card bg-pink-50/70 p-6 rounded-3xl border border-pink-100 shadow-sm">
+                            <div class="flex items-center">
+                                <div class="bg-pink-500 text-white p-3 rounded-2xl mr-4 shadow-lg shadow-pink-200">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-pink-700 text-xs font-bold uppercase">เพศหญิง</p>
+                                    <p class="text-3xl font-black text-pink-900">${item.female.toLocaleString()}</p>
+                                    <div class="flex items-center text-pink-500 text-xs font-bold">
+                                        <div class="w-16 h-1.5 bg-pink-200 rounded-full mr-2 overflow-hidden">
+                                            <div style="width: ${fPct}%" class="bg-pink-500 h-full"></div>
+                                        </div>
+                                        ${fPct}%
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- ตารางรายละเอียดสัญชาติ -->
-                    <div class="overflow-hidden border border-slate-100 rounded-xl shadow-sm">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-                                <tr>
-                                    <th class="p-4 font-bold">ข้อมูลสัญชาติ</th>
-                                    <th class="p-4 font-bold text-right">ชาย</th>
-                                    <th class="p-4 font-bold text-right">หญิง</th>
-                                    <th class="p-4 font-bold text-right bg-slate-100">รวม</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 text-slate-700">
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="p-4 flex items-center">
-                                        <span class="w-3 h-3 bg-emerald-500 rounded-full mr-3 shadow-sm shadow-emerald-200"></span>
-                                        <span class="font-medium">สัญชาติไทย</span>
-                                    </td>
-                                    <td class="p-4 text-right">${data.thai.m.toLocaleString()}</td>
-                                    <td class="p-4 text-right">${data.thai.f.toLocaleString()}</td>
-                                    <td class="p-4 text-right font-bold bg-slate-50/50">${data.thai.total.toLocaleString()}</td>
-                                </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="p-4 flex items-center">
-                                        <span class="w-3 h-3 bg-amber-500 rounded-full mr-3 shadow-sm shadow-amber-200"></span>
-                                        <span class="font-medium">ไม่ใช่สัญชาติไทย</span>
-                                    </td>
-                                    <td class="p-4 text-right">${data.nonThai.m.toLocaleString()}</td>
-                                    <td class="p-4 text-right">${data.nonThai.f.toLocaleString()}</td>
-                                    <td class="p-4 text-right font-bold bg-slate-50/50">${data.nonThai.total.toLocaleString()}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Nationality Progress Section -->
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-700 text-sm">การแยกสัญชาติ</h3>
+                            <div class="flex space-x-3">
+                                <div class="flex items-center text-[10px] font-bold text-emerald-600">
+                                    <span class="w-2 h-2 bg-emerald-500 rounded-full mr-1.5"></span> ไทย ${thaiPct}%
+                                </div>
+                                <div class="flex items-center text-[10px] font-bold text-amber-600">
+                                    <span class="w-2 h-2 bg-amber-500 rounded-full mr-1.5"></span> อื่นๆ ${nonThaiPct}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full h-10 bg-slate-200 rounded-2xl overflow-hidden flex shadow-inner p-1">
+                            <div style="width: ${thaiPct}%" class="bg-emerald-500 h-full rounded-xl flex items-center justify-center text-[10px] text-white font-bold transition-all duration-1000"></div>
+                            <div style="width: ${nonThaiPct}%" class="bg-amber-500 h-full rounded-xl ml-1 flex items-center justify-center text-[10px] text-white font-bold transition-all duration-1000"></div>
+                        </div>
+                        <div class="flex justify-between mt-4">
+                            <div class="text-left">
+                                <p class="text-slate-400 text-[10px] uppercase font-bold">สัญชาติไทย</p>
+                                <p class="text-xl font-black text-emerald-700">${item.thai.toLocaleString()} <span class="text-xs font-normal">คน</span></p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-slate-400 text-[10px] uppercase font-bold">ไม่ใช่สัญชาติไทย</p>
+                                <p class="text-xl font-black text-amber-700">${item.nonThai.toLocaleString()} <span class="text-xs font-normal">คน</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Section -->
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-700 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m6-2l5.447 2.724a1 1 0 01.553.894v10.764a1 1 0 01-1.447.894L15 17m0 0l-6 3m6-3V7m-6 10V4"></path></svg>
+                            ตำแหน่งที่ตั้งบนแผนที่
+                        </h3>
+                        <div class="map-container border border-slate-200 shadow-lg h-[300px]">
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                src="https://maps.google.com/maps?q=${item.mapQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed">
+                            </iframe>
+                        </div>
+                        <div class="flex justify-end">
+                            <a href="https://www.google.com/maps/search/${item.mapQuery}" target="_blank" class="text-blue-600 text-[11px] font-bold hover:underline flex items-center">
+                                เปิดใน Google Maps 
+                                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
             `;
         }
 
-        // เริ่มต้นการทำงานเมื่อหน้าโหลดเสร็จ
-        document.addEventListener('DOMContentLoaded', () => {
-            renderVillageList();
-            showDetail(0); // แสดงยอดรวมเป็นค่าเริ่มต้น
-        });
+        window.onload = init;
     </script>
 </body>
 </html>
